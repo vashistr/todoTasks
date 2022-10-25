@@ -1,0 +1,73 @@
+<div *ngIf="router.url == '/home'" class="container">
+  <div class="bodyContent">
+    <h1 class="heading borderBottom">TO DO TASKS</h1>
+    <div class="addTaskContainer">
+      <button class="btn btn-primary addTaskBtn" (click)="add()">+ Add New Task</button>
+      <input class="searchBar" [(ngModel)]="filterText" placeholder="Search Tasks">
+    </div>
+    <div class="row">
+    </div>
+    <ul>
+      <li *ngFor="let t of tasks|async|search:'description,text':filterText">
+        <div class="row">
+          <!-- <a routerLink="/app-task-details" class="col-6 margin10">Task: {{t.id}}, {{t.description}}</a> -->
+          <div (click)="taskPressed(t)" class="col-6 margin10 taskRow">Task: {{t.id}}, {{t.description}}</div>
+          <div class="col-5 alignRight">
+            <button [disabled]="t.completed" class="btn btn-success col-3 alignRight" (click)="complete(t.id, t.completed)">Complete</button>
+            <button class="btn btn-warning col-2 marginRight alignRight" (click)="openAssignPopup(t.id)">Assign</button>
+          </div>
+        </div>
+        <div class="borderBottom"></div>
+      </li>
+    </ul>
+  </div>
+
+  <div class="modal  centerAligned" tabindex="-1" role="dialog" [ngStyle]="{'display':addModalDisplayStyle}">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Add New Task</h4>
+        </div>
+        <div class="modal-body">
+          <label for="description" class="marginRight">Description</label>
+          <input id="description" name="description" type="text" [(ngModel)]="description">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" (click)="closeAddPopup()">
+            Close
+          </button>
+          <button [disabled]="!description" type="button" class="btn btn-primary" (click)="saveTask(description)">
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal  centerAligned" tabindex="-1" role="dialog" [ngStyle]="{'display':assignModalDisplayStyle}">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Assign Task</h4>
+        </div>
+        <div class="modal-body">
+          <!-- <label for="userName" class="marginRight">Description</label> -->
+          <select [(ngModel)]="userName">
+            <option *ngFor="let user of users|async" [id]="user.id" [value]="user.id" name="userName">{{user.name}}</option>
+          </select>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" (click)="closeAssignPopup()">
+            Close
+          </button>
+          <button [disabled]="!userName" type="button" class="btn btn-primary" (click)="assign()">
+            Assign
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<!-- <app-task-details *ngIf="isTaskPressed" [task]="task"></app-task-details> -->
+<router-outlet></router-outlet>

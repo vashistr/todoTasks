@@ -1,0 +1,61 @@
+.heading {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    margin-top: 30px;
+    justify-content: center;
+    align-items: center;
+}
+
+.searchBar {
+    height: 38px;
+    width: 75%;
+    margin-left: 20px;
+    margin-bottom: 20px;
+    background-color: #e6e6e6;
+}
+
+::placeholder {
+    font-style: italic;
+}
+
+.taskRow {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.taskRow:hover {
+    cursor:grab;
+}
+
+.margin10 {
+    margin: 10px;
+}
+
+.centerAligned {
+    align-items: center;
+    justify-content: center;
+}
+
+.marginRight {
+    margin-right: 10px;
+}
+
+.borderBottom {
+    border-bottom: 1px solid #ccc;
+    margin: 10px
+}
+
+.alignRight {
+    float: right;
+}
+
+.addTaskContainer {
+    width: 100%;
+    height: 100%;
+}
+
+.addTaskBtn {
+    float: right;
+    width: 20%;
+}
