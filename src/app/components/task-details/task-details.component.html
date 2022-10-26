@@ -1,6 +1,7 @@
 <div class="container">
     <h1 class="heading borderBottom">Task Details</h1>
-    <div class="row ">
+    <h1 class="centerAligned marginTop" *ngIf="isLoading">Loading....</h1>
+    <div *ngIf="!isLoading" class="row" >
         <div class="card backgroundImg centerAligned">
             <div class="card-body">
                 <h4 class="card-title">📚 Task: {{task?.id + 1}} 📚</h4>

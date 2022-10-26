@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Observable, of, throwError } from "rxjs";
-import { delay, tap } from "rxjs/operators";
+import { catchError, delay, retry, tap } from "rxjs/operators";
 
 /**
  * This service acts as a mock backend.
@@ -54,19 +54,19 @@ export class BackendService {
   private findUserById = id => this.storedUsers.find(user => user.id === +id);
 
   tasks() {
-    return of(this.storedTasks).pipe(delay(randomDelay()));
+    return of(this.storedTasks).pipe(delay(randomDelay())).pipe(retry(1), catchError(this.handleError));
   }
 
   task(id: number): Observable<Task> {
-    return of(this.findTaskById(id)).pipe(delay(randomDelay()));
+    return of(this.findTaskById(id)).pipe(delay(randomDelay())).pipe(retry(1), catchError(this.handleError));
   }
 
   users() {
-    return of(this.storedUsers).pipe(delay(randomDelay()));
+    return of(this.storedUsers).pipe(delay(randomDelay())).pipe(retry(1), catchError(this.handleError));
   }
 
   user(id: number) {
-    return of(this.findUserById(id)).pipe(delay(randomDelay()));
+    return of(this.findUserById(id)).pipe(delay(randomDelay())).pipe(retry(1), catchError(this.handleError));
   }
 
   newTask(payload: { description: string }) {
@@ -78,15 +78,15 @@ export class BackendService {
     };
 
     this.storedTasks = this.storedTasks.concat(newTask);
-    return of(newTask).pipe(delay(randomDelay()));
+    return of(newTask).pipe(delay(randomDelay())).pipe(retry(1), catchError(this.handleError));
   }
 
   assign(taskId: number, userId: number) {
-    return this.update(taskId, { assigneeId: userId });
+    return this.update(taskId, { assigneeId: userId }).pipe(retry(1), catchError(this.handleError));
   }
 
   complete(taskId: number, completed: boolean) {
-    return this.update(taskId, { completed });
+    return this.update(taskId, { completed }).pipe(retry(1), catchError(this.handleError));
   }
 
   update(taskId: number, updates: Partial<Omit<Task, "id">>) {
@@ -103,5 +103,20 @@ export class BackendService {
     );
 
     return of(updatedTask).pipe(delay(randomDelay()));
+  }
+
+  handleError(error: any) {
+    let errorMessage = '';
+    if (error.error instanceof ErrorEvent) {
+      // client-side error
+      errorMessage = `Error: ${error.error.message}`;
+    } else {
+      // server-side error
+      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+    }
+    console.log(errorMessage);
+    return throwError(() => {
+        return errorMessage;
+    });
   }
 }

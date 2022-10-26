@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterContentInit, AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { BackendService, Task, User } from 'src/app/backend.service';
+import { defer, fromEvent, merge, EMPTY } from 'rxjs';
+import { map, mapTo, delay, concatMap } from 'rxjs/operators';
 // import { Store } from '@ngrx/store';
 // import { AppState } from 'src/app/state/app.state';
 
@@ -10,7 +12,12 @@ import { BackendService, Task, User } from 'src/app/backend.service';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, AfterViewInit {
+
+  @ViewChild('desc',{static: false})
+  desc: ElementRef<HTMLInputElement>;
+  @ViewChild('saveBtn')
+  saveBtn: ElementRef<HTMLButtonElement>;
 
   router: Router;
   assignTaskId: number;
@@ -22,8 +29,31 @@ export class HomeComponent implements OnInit {
   addModalDisplayStyle: string = "none";
   assignModalDisplayStyle: string = "none";
 
+  // handling race conditions
+  saveBtnClicked$ = defer(() => fromEvent(this.saveBtn.nativeElement, 'click'));
+  descUpdated$ = defer(() => fromEvent(this.desc.nativeElement, 'blur')).pipe(map(event => event.target));
+
+  saveAndNavigate$ = merge(
+    this.descUpdated$.pipe(mapTo('A')), // when comment blur event fires
+    this.saveBtnClicked$.pipe(
+      // when save button is clicked wait to ensure that if the comment was fired as well it will go through first
+      delay(50),
+      mapTo('B')
+    )
+  ).pipe(
+    concatMap(origin => {
+      if (origin === 'A') {
+        return this.saveTask(this.desc.nativeElement.value);
+      } else {
+        this.closeAddPopup();
+        return EMPTY;
+      }
+    })
+  );
+
   constructor(private backend: BackendService, private _router: Router) {
     this.router = this._router;
+    
   }
 
   ngOnInit(): void {
@@ -31,6 +61,10 @@ export class HomeComponent implements OnInit {
     this.tasks = this.backend.tasks();
     // this.tasks = this.store.select(state => state.task);
     this.users = this.backend.users();
+  }
+
+  ngAfterViewInit(): void {
+    this.saveAndNavigate$.subscribe();
   }
 
   // addProduct(description) {
@@ -86,6 +120,7 @@ export class HomeComponent implements OnInit {
   }
   closeAddPopup(): void {
     this.addModalDisplayStyle = "none";
+    this.description = null;
   }
 
   // hide/unhide assign modal

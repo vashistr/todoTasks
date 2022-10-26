@@ -3,10 +3,21 @@ import { BackendService } from 'src/app/backend.service';
 import { RouterTestingModule } from "@angular/router/testing";
 import { HomeComponent } from './home.component';
 import { SearchPipe } from 'src/app/pipes/search.pipe';
+import { Route, Router, Routes } from '@angular/router';
+import { TaskDetailsComponent } from '../task-details/task-details.component';
+import { Location } from '@angular/common';
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
   let fixture: ComponentFixture<HomeComponent>;
+  let router: Router;
+  let location: Location;
+  let route: Routes = [
+    { path: '', redirectTo: 'home', pathMatch: "full" },
+    { path: 'home', component: HomeComponent },
+    { path: 'app-task-details', component: TaskDetailsComponent },
+    { path: 'app-task-details/:id', component: TaskDetailsComponent },
+  ]
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -17,8 +28,12 @@ describe('HomeComponent', () => {
         providers: [
             {provide: BackendService, useValue: new BackendService()}
         ],
-        imports: [RouterTestingModule.withRoutes([])]
+        imports: [RouterTestingModule.withRoutes(route)]
     }).compileComponents();
+    router = TestBed.get(Router);
+    location = TestBed.get(Location);
+
+    router.initialNavigation(); 
   }));
 
   beforeEach(() => {
@@ -55,7 +70,7 @@ describe('HomeComponent', () => {
       description: 'desc1'
     });
     tick();
-    expect(app.tasks.length === 2)
+    expect(app.tasks.length).toBe(1)
     discardPeriodicTasks() 
   }));
 
@@ -68,12 +83,23 @@ describe('HomeComponent', () => {
     let button = fixture.debugElement.nativeElement.querySelector('#complete0');
     app.tasks = [{id: 1, description: 'desc', assigneeId: 1, completed: true }]
     app.complete(1);
+    // const confirmButton = document.querySelector(  
+    //   '.dx-overlay-wrapper .dx-button'  
+    // ) as HTMLElement;  
+    // confirmButton.click();
     spyOn(window, 'confirm').and.returnValue(true);
     fixture.whenStable().then(()=> {
       expect(app.isCompleted).toBe(true);
     })
   }));
 
+  it('should redirect', fakeAsync(() => {
+    const fixture = TestBed.createComponent(HomeComponent);
+    let app = fixture.debugElement.componentInstance;
+    router.navigate(['/app-task-details']);
+    tick();
+    expect(location.path()).toBe('/app-task-details');
+  }))
 });
 
 function MockPipe(Pipe: any, arg1: (value: any) => string): any {

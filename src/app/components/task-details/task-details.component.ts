@@ -14,6 +14,8 @@ export class TaskDetailsComponent implements OnInit {
   user: User;
   route: ActivatedRoute;
   description: string = ""
+  isLoading: boolean = true;
+
   constructor(private _route: ActivatedRoute, private backendService: BackendService) {
     this.route = this._route;
    }
@@ -24,6 +26,7 @@ export class TaskDetailsComponent implements OnInit {
       this.task = t
       this.backendService.user(t.assigneeId).subscribe((u) => {
         this.user = u;
+        this.isLoading = false;
       })
     });
   }

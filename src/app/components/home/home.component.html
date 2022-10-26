@@ -2,7 +2,7 @@
     <h1 class="heading borderBottom">Your TODO Tasks</h1>
     <div class="addTaskContainer">
         <button id="addNewTask" class="btn btn-primary addTaskBtn" (click)="add()">+ Add New Task</button>
-        <input class="searchBar" [(ngModel)]="filterText" placeholder="Search Tasks">
+        <input #searchTxt class="searchBar" [(ngModel)]="filterText" placeholder="Search Tasks">
     </div>
     <div class="row marginBottom">
     </div>
@@ -32,13 +32,13 @@
                 </div>
                 <div class="modal-body">
                     <label for="description" class="marginRight">Description</label>
-                    <input id="description" name="description" type="text" [(ngModel)]="description">
+                    <input #desc name="description" type="text" [(ngModel)]="description">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" (click)="closeAddPopup()">
                         Close
                     </button>
-                    <button id="saveBtn" [disabled]="!description" type="button" class="btn btn-primary"
+                    <button #saveBtn [disabled]="!description" type="button" class="btn btn-primary"
                         (click)="saveTask(description)">
                         Save
                     </button>
