@@ -5,6 +5,9 @@
         <input #searchTxt class="searchBar" [(ngModel)]="filterText" placeholder="Search Tasks">
     </div>
     <div class="row marginBottom">
+        <div *ngIf="isTaskAdded" class="alert alert-warning">Task Added</div>
+        <div *ngIf="isTaskAssigned" class="alert alert-warning">Task Assigned</div>
+        <div *ngIf="isTaskCompleted" class="alert alert-warning">Task Completed</div>
     </div>
     <ul>
         <!-- <li *ngFor="let t of tasks|async|search:'description,text':filterText"> -->
@@ -38,8 +41,7 @@
                     <button type="button" class="btn btn-danger" (click)="closeAddPopup()">
                         Close
                     </button>
-                    <button #saveBtn [disabled]="!description" type="button" class="btn btn-primary"
-                        (click)="saveTask(description)">
+                    <button #saveBtn [disabled]="!description" type="button" class="btn btn-primary">
                         Save
                     </button>
                 </div>

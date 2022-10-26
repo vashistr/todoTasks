@@ -25,7 +25,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
   description: string = "";
   users: Observable<User[]>;
   tasks: Observable<Task[]>;
+  isTaskAdded: boolean = false
   isCompleted: boolean = false;
+  isTaskAssigned: boolean = false
+  isTaskCompleted: boolean = false
   addModalDisplayStyle: string = "none";
   assignModalDisplayStyle: string = "none";
 
@@ -83,6 +86,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.addModalDisplayStyle="none";
       this.tasks = this.backend.tasks();
       this.description = null;
+
+      this.isTaskAssigned = false;
+      this.isTaskCompleted = false;
+      this.isTaskAdded = true;
     });
   }
 
@@ -92,6 +99,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
       console.log("Task assigned to user");
       this.assignModalDisplayStyle = "none";
       this.userId = null;
+
+      this.isTaskAssigned = true;
+      this.isTaskCompleted = false;
+      this.isTaskAdded = false;
     })
   }
 
@@ -101,6 +112,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
       await this.backend.complete(id, true).subscribe(() => {
         this.tasks = this.backend.tasks();
         this.isCompleted = true
+
+        this.isTaskAssigned = false;
+        this.isTaskCompleted = true;
+        this.isTaskAdded = false;
       });
     }
   }
