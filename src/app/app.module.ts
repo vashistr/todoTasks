@@ -6,11 +6,13 @@ import { RouterModule, Routes } from '@angular/router';
 import { TaskDetailsComponent } from './components/task-details/task-details.component'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SearchPipe } from './pipes/search.pipe';
+import { HomeComponent } from './components/home/home.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: "full" },
-  { path: 'home', component: AppComponent },
+  { path: 'home', component: HomeComponent },
   { path: 'app-task-details', component: TaskDetailsComponent },
+  { path: 'app-task-details/:id', component: TaskDetailsComponent },
 ]
 
 @NgModule({
@@ -18,6 +20,7 @@ const routes: Routes = [
     AppComponent,
     TaskDetailsComponent,
     SearchPipe,
+    HomeComponent,
   ],
   imports: [
     FormsModule,

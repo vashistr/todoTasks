@@ -1,0 +1,76 @@
+<div class="container">
+    <h1 class="heading borderBottom">Your TODO Tasks</h1>
+    <div class="addTaskContainer">
+        <button id="addNewTask" class="btn btn-primary addTaskBtn" (click)="add()">+ Add New Task</button>
+        <input class="searchBar" [(ngModel)]="filterText" placeholder="Search Tasks">
+    </div>
+    <div class="row marginBottom">
+    </div>
+    <ul>
+        <!-- <li *ngFor="let t of tasks|async|search:'description,text':filterText"> -->
+            <li *ngFor="let t of tasks|async|search:'description':filterText">
+            <div class="row">
+                <div attr.id="task{{t.id}}" (click)="taskPressed(t)" class="col-5 marginBottom center taskRow">📚 Task: {{t.description}}</div>
+                <div class="col-2"></div>
+                <div class="col-5 marginBottom alignRight">
+                    <button attr.id="complete{{t.id}}" [disabled]="t.completed" class="btn btn-success col-3 alignRight"
+                        (click)="complete(t.id, t.completed)">Complete</button>
+                    <button class="btn btn-warning col-2 alignRight marginRight"
+                        (click)="openAssignPopup(t.id)">Assign</button>
+                </div>
+            </div>
+            <div class="borderBottom"></div>
+        </li>
+    </ul>
+
+    <!-- add new task modal -->
+    <div id="addTaskModal" class="modal  centerAligned" tabindex="-1" role="dialog" [ngStyle]="{'display':addModalDisplayStyle}">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Add New Task</h4>
+                </div>
+                <div class="modal-body">
+                    <label for="description" class="marginRight">Description</label>
+                    <input id="description" name="description" type="text" [(ngModel)]="description">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" (click)="closeAddPopup()">
+                        Close
+                    </button>
+                    <button id="saveBtn" [disabled]="!description" type="button" class="btn btn-primary"
+                        (click)="saveTask(description)">
+                        Save
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- assign task to user modal -->
+    <div class="modal  centerAligned" tabindex="-1" role="dialog" [ngStyle]="{'display':assignModalDisplayStyle}">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Assign Task</h4>
+                </div>
+                <div class="modal-body">
+                    <label for="userId" class="marginRight">User</label>
+                    <select [(ngModel)]="userId">
+                        <option *ngFor="let user of users|async" [id]="user.id" [value]="user.id" name="userId">
+                            {{user.name}}</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" (click)="closeAssignPopup()">
+                        Close
+                    </button>
+                    <button [disabled]="!userId" type="button" class="btn btn-primary" (click)="assign()">
+                        Assign
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

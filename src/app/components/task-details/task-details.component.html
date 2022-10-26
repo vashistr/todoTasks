@@ -1,3 +1,16 @@
 <div class="container">
-<p>task-details works!</p>
+    <h1 class="heading borderBottom">Task Details</h1>
+    <div class="row ">
+        <div class="card backgroundImg centerAligned">
+            <div class="card-body">
+                <h4 class="card-title">📚 Task: {{task?.id + 1}} 📚</h4>
+                <div class="card-text">
+                    <p><b>{{task?.description}}</b></p>
+                    <p><b>𝍎 Completed:</b> {{task?.completed ? '✅' : '❌'}}</p>
+                    <p><b>🙋🏻‍♂️ Assigned To:</b> {{user?.name}}</p>
+                </div>
+                <button routerLink="/home" class="btn btn-success">Back to home</button>
+            </div>
+        </div>
+    </div>
 </div>

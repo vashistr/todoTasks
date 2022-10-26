@@ -1,4 +1,37 @@
 /* You can add global styles to this file, and also import other style files */
 body {
-    background: url(./app/assets/1385482.jpeg)  no-repeat fixed;
+    background: url(./app/assets/faded2.jpeg) no-repeat fixed;
 }
+
+.heading {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    margin-top: 20px;
+    justify-content: center;
+    align-items: center;
+}
+
+.margin10 {
+    margin: 10px;
+}
+
+.centerAligned {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.marginRight {
+    margin-right: 10px;
+}
+
+.borderBottom {
+    border-bottom: 1px solid black;
+    margin-bottom: 20px
+}
+
+.alignRight {
+    float: right;
+}
+

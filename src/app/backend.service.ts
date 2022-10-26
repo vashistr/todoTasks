@@ -78,7 +78,6 @@ export class BackendService {
     };
 
     this.storedTasks = this.storedTasks.concat(newTask);
-    console.log(this.storedTasks);
     return of(newTask).pipe(delay(randomDelay()));
   }
 
