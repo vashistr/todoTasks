@@ -26,7 +26,8 @@ const routes: Routes = [
     FormsModule,
     BrowserModule,
     ReactiveFormsModule,
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot(routes),
+    // StoreModule.forRoot({product: addTaskReducer})
   ],
   providers: [BackendService],
   bootstrap: [AppComponent]

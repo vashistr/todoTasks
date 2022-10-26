@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { BackendService, Task, User } from 'src/app/backend.service';
+// import { Store } from '@ngrx/store';
+// import { AppState } from 'src/app/state/app.state';
 
 @Component({
   selector: 'app-home',
@@ -27,8 +29,18 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     // fetch tasks and users
     this.tasks = this.backend.tasks();
+    // this.tasks = this.store.select(state => state.task);
     this.users = this.backend.users();
   }
+
+  // addProduct(description) {
+  //   this.store.dispatch({
+  //     type: 'ADD_PRODUCT',
+  //     payload: <Task> {
+  //       description: description
+  //     }
+  //   });
+  // }
 
   // save new task implementation
   async saveTask(description: string) {
